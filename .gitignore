@@ -1,0 +1,7 @@
+.env
+.vercel
+node_modules
+dist
+eslint.config.mjs
+vercel.json
+package-lock.json
