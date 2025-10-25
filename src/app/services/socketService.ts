@@ -41,8 +41,6 @@ export const initSocketServer = (server: HttpServer) => {
   });
 
   io.on('connection', (socket: any) => {
-    console.log('User connected:', socket.user._id);
-
     socket.join(`user_${socket.user._id}`);
 
     if (socket.user.role === 'driver') {
@@ -52,7 +50,6 @@ export const initSocketServer = (server: HttpServer) => {
     socket.on('listen_for_rides', () => {
       if (socket.user.role === 'driver') {
         socket.join('available_drivers');
-        console.log(`Driver ${socket.user._id} is now listening for rides`);
       }
     });
 
@@ -81,8 +78,6 @@ export const initSocketServer = (server: HttpServer) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.user._id);
-
       if (socket.user.role === 'driver') {
         socket.leave('available_drivers');
       }

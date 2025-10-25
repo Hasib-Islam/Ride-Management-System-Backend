@@ -9,13 +9,15 @@ const register = async (req: Request, res: Response) => {
 
     res.cookie('accessToken', result.tokens.accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
+      sameSite: 'none',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
@@ -25,6 +27,7 @@ const register = async (req: Request, res: Response) => {
       message: 'User registered successfully',
       data: {
         user: result.user,
+        tokens: result.tokens,
       },
     });
   } catch (error: unknown) {
@@ -45,13 +48,15 @@ const login = async (req: Request, res: Response) => {
 
     res.cookie('accessToken', result.tokens.accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie('refreshToken', result.tokens.refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
+      sameSite: 'none',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
@@ -61,6 +66,7 @@ const login = async (req: Request, res: Response) => {
       message: 'User logged in successfully',
       data: {
         user: result.user,
+        tokens: result.tokens,
       },
     });
   } catch (error: unknown) {

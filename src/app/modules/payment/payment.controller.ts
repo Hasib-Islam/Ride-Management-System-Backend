@@ -100,20 +100,9 @@ const initiatePayment = async (req: Request, res: Response) => {
 
 const handleIPN = async (req: Request, res: Response) => {
   try {
-    const { val_id, tran_id, status, amount, store_amount, currency } =
-      req.body;
-
-    console.log('IPN received:', {
-      val_id,
-      tran_id,
-      status,
-      amount,
-      store_amount,
-      currency,
-    });
+    const { val_id, tran_id, status } = req.body;
 
     if (status !== 'VALID') {
-      console.log('IPN status not VALID:', status);
       return sendResponse(res, {
         success: false,
         statusCode: httpStatus.BAD_REQUEST,
@@ -125,7 +114,6 @@ const handleIPN = async (req: Request, res: Response) => {
     const validationResponse = await SSLCommerzService.validatePayment(val_id);
 
     if (validationResponse.status !== 'VALID') {
-      console.log('SSLCommerz validation failed:', validationResponse.status);
       return sendResponse(res, {
         success: false,
         statusCode: httpStatus.BAD_REQUEST,
@@ -141,7 +129,6 @@ const handleIPN = async (req: Request, res: Response) => {
     );
 
     if (!payment) {
-      console.log('Payment not found for transaction ID:', tran_id);
       return sendResponse(res, {
         success: false,
         statusCode: httpStatus.NOT_FOUND,
@@ -154,11 +141,6 @@ const handleIPN = async (req: Request, res: Response) => {
       status: 'completed',
       completedAt: new Date(),
     });
-
-    console.log(
-      'Payment and ride status updated successfully for transaction:',
-      tran_id
-    );
 
     res.status(200).send('IPN received and processed successfully');
   } catch (error: unknown) {
